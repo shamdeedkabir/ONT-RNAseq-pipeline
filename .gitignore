@@ -3,10 +3,6 @@
 results/
 data/
 logs/
-profiles/
-config/
-
-config.yaml
 
 *.html
 *.svg

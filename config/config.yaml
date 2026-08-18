@@ -1,0 +1,11 @@
+# declare input and output directories for the pipeline
+
+# input directory containing ONT basecalled fastq reads (dedicated folders for each barcodes)
+in_dir: "/work/kabir/USDA-RNA-seq-data/hatch7_run2"
+
+# output directory where all the pipeline files will be written to
+out_dir: "/work/kabir/USDA-RNA-seq-data-pipeline-output/hatch7_run2"
+
+# directory to the the reference genome/transcriptome folder
+##### required in the directory: genome.fna, genome.gtf, rna.fna
+ref_dir: "/home/kabir/GalGal-ref/ncbi.Genome_assembly.bGalGal1.mat.broiler.GRCg7b/ncbi_dataset/data/GCF_016699485.2"
