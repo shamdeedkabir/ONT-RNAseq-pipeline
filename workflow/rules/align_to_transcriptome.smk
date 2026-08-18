@@ -1,0 +1,35 @@
+rule align_to_transcriptome:
+    input:
+        os.path.join(config["out_dir"], "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
+    output:
+        os.path.join(config["out_dir"], "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
+    log:
+        "logs/c0i-aligned-to-transcriptome/{barcode}.log"
+    conda:
+        "../envs/minimap2.yaml"
+    shell:
+        """
+        (
+            echo "======== minimap2 version:"
+            minimap2 --version
+        
+            echo "======== samtools version:"
+            samtools --version
+
+            minimap2 \
+                -ax map-ont \
+                -N 100 \
+                --eqx \
+                -t {resources[minimap2_threads]} \
+                "{config[ref_dir]}/rna.fna" \
+                {input} | \
+            samtools \
+                view \
+                -@ {resources[samtools_threads]} \
+                -b \
+                -o {output}
+        
+        echo "======= PROCESS COMPLETED (minimap2 transcriptome alignment): {wildcards.barcode}"
+        ) > {log} 2>&1
+        """
+    

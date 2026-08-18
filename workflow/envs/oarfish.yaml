@@ -1,0 +1,5 @@
+name: oarfish
+channels:
+  - bioconda
+dependencies:
+  - oarfish=0.10.3

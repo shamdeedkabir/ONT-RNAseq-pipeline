@@ -1,0 +1,8 @@
+name: pychopper
+channels:
+  - nanoporetech
+  - conda-forge
+  - bioconda
+dependencies:
+  - nanoporetech::pychopper=2.7.10
+  - pigz=2.8

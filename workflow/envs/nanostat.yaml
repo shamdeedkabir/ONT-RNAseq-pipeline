@@ -1,0 +1,6 @@
+name: nanostat
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - nanostat=1.6.0

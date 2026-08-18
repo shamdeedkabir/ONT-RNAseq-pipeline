@@ -1,0 +1,25 @@
+rule oarfish_quant_transcriptome_aligned:
+    input:
+        os.path.join(config["out_dir"], "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
+    output:
+        os.path.join(config["out_dir"], "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant")
+    log:
+        "logs/d0i-oarfish-transcriptome-aligned/{barcode}.log"
+    conda:
+        "../envs/oarfish.yaml"
+    shell:
+        """
+        (
+            echo "========== oarfish version:"
+            oarfish --version
+
+            oarfish \
+                -j {resources[oarfish_threads]} \
+                -a {input} \
+                -o "{config[out_dir]}/d0i-oarfish-transcriptome-aligned/{wildcards.barcode}_oarfish_quant_transcriptome_aligned" \
+                --filter-group no-filters \
+                --model-coverage
+
+            echo "======= PROCESS COMPLETED (oarfish on transcriptome aligned): {wildcards.barcode}"
+        ) > {log} 2>&1
+        """
