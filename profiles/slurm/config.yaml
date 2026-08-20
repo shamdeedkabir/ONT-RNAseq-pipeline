@@ -29,9 +29,9 @@ set-resources:
     total_cpus: 8
     slurm_job_name: "nanostat_{wildcards.run}_{wildcards.barcode}"
   pychopper_trim:
-    cpus_per_task: 16
-    total_cpus: 16
-    pychopper_threads: 12
+    cpus_per_task: 12
+    total_cpus: 12
+    pychopper_threads: 10
     pigz_threads: 2
     slurm_job_name: "pychopper_{wildcards.run}_{wildcards.barcode}"
   align_to_transcriptome:
