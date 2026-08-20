@@ -12,7 +12,7 @@ rule make_read_qc_report:
         """
         (
             ./workflow/scripts/parse_qc_data.py \
-                -i {config[in_dir]} \
+                -i {config[out_dir]} \
                 -o {config[outdir]}/summary
         ) > {log} 2>&1
         """

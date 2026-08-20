@@ -16,6 +16,10 @@ rule align_to_transcriptome:
             echo "======== samtools version:"
             samtools --version
 
+            echo "======== Total Threads: {resources[cpus_per_task]}"
+            echo "======== Total Threads: {resources[minimap2_threads]}"
+            echo "======== Total Threads: {resources[samtools_threads]}"
+
             minimap2 \
                 -ax map-ont \
                 -N 100 \
