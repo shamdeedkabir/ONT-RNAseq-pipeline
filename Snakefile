@@ -8,30 +8,48 @@ import os
 configfile: "config/config.yaml"
 
 IN_DIR = config["in_dir"]
-OUT_DIR = config["out_dir"]
-
-# Expected barcode folders: barcode01 ... barcode24
-BARCODES = [f"barcode{idx:02d}" for idx in range(1, 25)]
+OUT_DIR= config["out_dir"]
 
 wildcard_constraints:
+    run     = r"[^/]+",
     barcode = r"barcode\d+"
 
-# Keep the same folder layout under the output directory while concatenating reads
-# Example output: {out_dir}/barcode01/reads.fastq.gz
+def discover_run_barcode_pairs(in_dir):
+    """Scan in_dir for run folders, and within each, barcode folders."""
+    runs = sorted(
+        d for d in os.listdir(in_dir)
+        if os.path.isdir(os.path.join(in_dir, d))
+    )
+
+    pairs = []
+    for run in runs:
+        run_path = os.path.join(in_dir, run)
+        barcodes = sorted(
+            d for d in os.listdir(run_path)
+            if os.path.isdir(os.path.join(run_path, d)) and d.startswith("barcode")
+        )
+        pairs.extend((run, bc) for bc in barcodes)
+    return pairs
+
+RUN_BARCODE_PAIRS = discover_run_barcode_pairs(IN_DIR)
+RUNS_LIST     = [p[0] for p in RUN_BARCODE_PAIRS]
+BARCODES_LIST = [p[1] for p in RUN_BARCODE_PAIRS]
+
 rule all:
     input:
-        expand(os.path.join(OUT_DIR, "a0-concat-fastq", "{barcode}_concatenated.fastq.gz"), barcode=BARCODES),
-        expand(os.path.join(OUT_DIR, "a1-nanostat-raw-reads", "{barcode}_raw_read_nanostat.txt"), barcode=BARCODES),
-        expand(os.path.join(OUT_DIR, "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"), barcode=BARCODES),
-        expand(os.path.join(OUT_DIR, "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"), barcode=BARCODES),
-        expand(os.path.join(OUT_DIR, "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"), barcode=BARCODES),
+        expand(os.path.join(OUT_DIR, "{run}", "a0-concat-fastq", "{barcode}_concatenated.fastq.gz"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        expand(os.path.join(OUT_DIR, "{run}", "a1-nanostat-raw-reads", "{barcode}_raw_read_nanostat.txt"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        expand(os.path.join(OUT_DIR, "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        expand(os.path.join(OUT_DIR, "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        expand(os.path.join(OUT_DIR, "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
 
-# Include the rule definitions from the separate Snakefile module.
 include: "workflow/rules/cat_reads.smk"
 include: "workflow/rules/nanostat_raw_reads.smk"
 include: "workflow/rules/pychopper_trim.smk"
 include: "workflow/rules/align_to_transcriptome.smk"
 include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
-
-# Optional: a helper rule can be added here if you want to expose the final target
-# in a more general way, but the main workflow entry point is the included rule file.

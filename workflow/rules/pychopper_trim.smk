@@ -1,17 +1,17 @@
 rule pychopper_trim:
     input:
-        os.path.join(config["out_dir"], "a0-concat-fastq", "{barcode}_concatenated.fastq.gz")
+        os.path.join(config["out_dir"], "{run}", "a0-concat-fastq", "{barcode}_concatenated.fastq.gz")
     output:
-        os.path.join(config["out_dir"], "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
+        os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
     log:
-        "logs/b0-pychopper-trimmed/{barcode}.log"
+        os.path.join(config["out_dir"], "logs", "{run}", "b0-pychopper-trimmed", "{barcode}.log")
     conda:
         "../envs/pychopper.yaml"
     params:
-        report_file = os.path.join(config["out_dir"], "b0-pychopper-trimmed", "{barcode}_pychopper_report.pdf"),
-        unclassified_fastq = os.path.join(config["out_dir"], "b0-pychopper-trimmed", "{barcode}_pychopper_unclassified.fastq"),
-        rescued_fastq = os.path.join(config["out_dir"], "b0-pychopper-trimmed", "{barcode}_pychopper_rescued.fastq"),
-        stat_file = os.path.join(config["out_dir"], "b0-pychopper-trimmed", "{barcode}_pychopper_stats.tsv")
+        report_file = os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_report.pdf"),
+        unclassified_fastq = os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_unclassified.fastq"),
+        rescued_fastq = os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_rescued.fastq"),
+        stat_file = os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_stats.tsv")
     shell:
         """
         (

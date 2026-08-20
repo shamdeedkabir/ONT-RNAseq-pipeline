@@ -23,23 +23,25 @@ set-resources:
   cat_reads:
     cpus_per_task: 8
     total_cpus: 8
-    slurm_job_name: "fastcat_{wildcards.barcode}"
+    slurm_job_name: "fastcat_{wildcards.run}_{wildcards.barcode}"
   nanostat_raw_reads:
     cpus_per_task: 8
     total_cpus: 8
-    slurm_job_name: "nanostat_{wildcards.barcode}"
+    slurm_job_name: "nanostat_{wildcards.run}_{wildcards.barcode}"
   pychopper_trim:
-    cpus_per_task: 12
-    total_cpus: 12
-    pychopper_threads: 8
+    cpus_per_task: 20
+    total_cpus: 20
+    pychopper_threads: 16
     pigz_threads: 4
-    slurm_job_name: "pychopper_{wildcards.barcode}"
+    slurm_job_name: "pychopper_{wildcards.run}_{wildcards.barcode}"
   align_to_transcriptome:
     cpus_per_task: 12
     total_cpus: 12
     minimap2_threads: 10
     samtools_threads: 2
+    slurm_job_name: "minimap2_on_transcriptome_{wildcards.run}_{wildcards.barcode}"
   oarfish_quant_transcriptome_aligned:
-    cpus_per_task: 12
-    total_cpus: 12
-    oarfish_threads: 12
+    cpus_per_task: 8
+    total_cpus: 8
+    oarfish_threads: 8
+    slurm_job_name: "oarfish_on_transcriptome_alignment_{wildcards.run}_{wildcards.barcode}"

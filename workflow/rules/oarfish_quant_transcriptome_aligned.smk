@@ -1,10 +1,10 @@
 rule oarfish_quant_transcriptome_aligned:
     input:
-        os.path.join(config["out_dir"], "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
+        os.path.join(config["out_dir"], "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
     output:
-        os.path.join(config["out_dir"], "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant")
+        os.path.join(config["out_dir"], "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant")
     log:
-        "logs/d0i-oarfish-transcriptome-aligned/{barcode}.log"
+        os.path.join(config["out_dir"], "logs", "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}.log")
     conda:
         "../envs/oarfish.yaml"
     shell:
@@ -16,7 +16,7 @@ rule oarfish_quant_transcriptome_aligned:
             oarfish \
                 -j {resources[oarfish_threads]} \
                 -a {input} \
-                -o "{config[out_dir]}/d0i-oarfish-transcriptome-aligned/{wildcards.barcode}_oarfish_quant_transcriptome_aligned" \
+                -o "{config[out_dir]}/{wildcards.run}/d0i-oarfish-transcriptome-aligned/{wildcards.barcode}_oarfish_quant_transcriptome_aligned" \
                 --filter-group no-filters \
                 --model-coverage
 

@@ -1,10 +1,10 @@
 rule align_to_transcriptome:
     input:
-        os.path.join(config["out_dir"], "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
+        os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
     output:
-        os.path.join(config["out_dir"], "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
+        os.path.join(config["out_dir"], "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
     log:
-        "logs/c0i-aligned-to-transcriptome/{barcode}.log"
+        os.path.join(config["out_dir"], "logs", "{run}", "c0i-aligned-to-transcriptome", "{barcode}.log")
     conda:
         "../envs/minimap2.yaml"
     shell:
@@ -32,4 +32,3 @@ rule align_to_transcriptome:
         echo "======= PROCESS COMPLETED (minimap2 transcriptome alignment): {wildcards.barcode}"
         ) > {log} 2>&1
         """
-    
