@@ -20,5 +20,5 @@ rule cat_reads:
             -o {config[out_dir]}/{wildcards.run}/a0-concat-fastq/{wildcards.barcode}_fastqc \
             | bgzip -@ {resources[cpus_per_task]} > {output}) 2> {log}
 
-        echo "PROCESSING COMPLETED (fastcat): {wildcards.run}/{wildcards.barcode}" >> {log}         
+        echo "PROCESSING COMPLETED (fastcat): {wildcards.run}--{wildcards.barcode}" >> {log}         
         """

@@ -25,6 +25,6 @@ rule pychopper_trim:
                 {input} \
                 - | pigz -p {resources[pigz_threads]} > {output} 
             
-            echo "======= PROCESS COMPLETED (pychopper): {wildcards.barcode}"
+            echo "======= PROCESS COMPLETED (pychopper): {wildcards.run}--{wildcards.barcode}"
         ) > {log} 2>&1
         """

@@ -16,6 +16,6 @@ rule nanostat_raw_reads:
                 -n {wildcards.barcode}_raw_read_nanostat.txt \
                 --threads {resources[cpus_per_task]}
 
-                echo "PROCESS COMPLETED (nanostat): {wildcards.run}/{wildcards.barcode}"
+                echo "PROCESS COMPLETED (nanostat): {wildcards.run}--{wildcards.barcode}"
         ) > {log} 2>&1
         """

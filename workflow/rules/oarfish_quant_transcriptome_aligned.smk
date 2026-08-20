@@ -20,6 +20,6 @@ rule oarfish_quant_transcriptome_aligned:
                 --filter-group no-filters \
                 --model-coverage
 
-            echo "======= PROCESS COMPLETED (oarfish on transcriptome aligned): {wildcards.barcode}"
+            echo "======= PROCESS COMPLETED (oarfish on transcriptome aligned): {wildcards.run}--{wildcards.barcode}"
         ) > {log} 2>&1
         """

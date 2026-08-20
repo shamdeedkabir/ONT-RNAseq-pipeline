@@ -29,6 +29,6 @@ rule align_to_transcriptome:
                 -b \
                 -o {output}
         
-        echo "======= PROCESS COMPLETED (minimap2 transcriptome alignment): {wildcards.barcode}"
+        echo "======= PROCESS COMPLETED (minimap2 transcriptome alignment): {wildcards.run}--{wildcards.barcode}"
         ) > {log} 2>&1
         """
