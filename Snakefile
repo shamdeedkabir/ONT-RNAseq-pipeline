@@ -56,6 +56,7 @@ rule all:
                zip, run=RUNS_LIST, barcode=BARCODES_LIST),
         expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
                zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        os.path.join(OUT_DIR, "resources", "nanostat_pychopper_flagstatGenomic_read_qc.tsv")
 
 include: "workflow/rules/cat_reads.smk"
 include: "workflow/rules/nanostat_raw_reads.smk"
@@ -67,3 +68,4 @@ include: "workflow/rules/make_minimap2_mmi_file.smk"
 include: "workflow/rules/align_to_genome.smk"
 include: "workflow/rules/flagstat_transcriptome_alignment.smk"
 include: "workflow/rules/flagstat_genome_alignment.smk"
+include: "workflow/rules/compile_qc.smk"

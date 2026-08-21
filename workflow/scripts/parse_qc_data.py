@@ -138,6 +138,77 @@ def parse_pychopper(base_dir):
 
     return pd.DataFrame(results)
 
+def parse_flagstat_genome_alignment(base_dir):
+    
+    base_dir = Path(base_dir)
+
+    results = []
+
+    for run_dir in base_dir.iterdir():
+
+        # Only process directories
+        if not run_dir.is_dir():
+            continue
+
+        flagstat_dir = run_dir / "c1ii-flagstat-genome-alignments"
+
+        if not flagstat_dir.exists():
+            continue
+
+        # Loop through all barcode files
+        for file in flagstat_dir.glob("barcode*.txt"):
+
+            flagstat_total_reads = None
+            flagstat_primary_reads = None
+            flagstat_secondary_reads = None
+            flagstat_supplementary_reads = None
+            flagstat_mapped_reads = None
+            flagstat_mapped_pct = None
+            flagstat_primary_mapped_reads = None
+            flagstat_primary_mapped_pct = None
+
+            with open(file, "r") as f:
+                for idx, line in enumerate(f):
+
+                    if "in total" in line:
+                        flagstat_total_reads = float(line.split("+")[0].strip())
+
+                    elif idx==1:
+                        flagstat_primary_reads = float(line.split("+")[0].strip())
+
+                    elif idx==2:
+                        flagstat_secondary_reads = float(line.split("+")[0].strip())
+
+                    elif idx==3:
+                        flagstat_supplementary_reads = float(line.split("+")[0].strip())
+
+                    elif idx==6:
+                        flagstat_mapped_reads = float(line.split("+")[0].strip())
+                        flagstat_mapped_pct = float(line.split("(")[1].split("%")[0])
+
+                    elif idx==7:
+                        flagstat_primary_mapped_reads = float(line.split("+")[0].strip())
+                        flagstat_primary_mapped_pct = float(line.split("(")[1].split("%")[0])
+
+            # Extract run and barcode names
+            run = run_dir.name
+            barcode = file.name.split("_")[0]
+
+            results.append({
+                "run": run,
+                "barcode": barcode,
+                "genome_flagstat_total_reads": flagstat_total_reads,
+                "genome_flagstat_primary_reads": flagstat_primary_reads,
+                "genome_flagstat_secondary_reads": flagstat_secondary_reads,
+                "genome_flagstat_supplementary_reads": flagstat_supplementary_reads,
+                "genome_flagstat_mapped_reads": flagstat_mapped_reads,
+                "genome_flagstat_mapped_pct": flagstat_mapped_pct,
+                "genome_flagstat_primary_mapped_reads": flagstat_primary_mapped_reads,
+                "genome_flagstat_primary_mapped_pct": flagstat_primary_mapped_pct
+            })
+
+    return pd.DataFrame(results)
+
 
 def main():
 
@@ -176,6 +247,7 @@ def main():
     # Parse statistics
     nanostat_df = parse_nanostat(input_dir)
     pychopper_df = parse_pychopper(input_dir)
+    genome_flagstat_df = parse_flagstat_genome_alignment(input_dir)
 
     # Merge df
     merged_df = pd.merge(
@@ -184,9 +256,15 @@ def main():
         on=["run", "barcode"],
         how="outer"
     )
+    merged_df = pd.merge(
+        merged_df,
+        genome_flagstat_df,
+        on=["run", "barcode"],
+        how="outer"
+    )
 
     # Save output
-    output_file = output_dir / "nanostat_pychopper_read_qc.tsv"
+    output_file = output_dir / "nanostat_pychopper_flagstatGenomic_read_qc.tsv"
     merged_df.to_csv(output_file, sep="\t", index=False)
 
     print(f"Processed {len(merged_df)} barcode files.")
