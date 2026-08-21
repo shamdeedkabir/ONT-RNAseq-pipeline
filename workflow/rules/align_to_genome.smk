@@ -11,14 +11,13 @@
 
 rule align_to_genome:
     input:
-        os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
+        input_fastq = os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
+        mmi_file = os.path.join(config["out_dir"], "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi"),
+        bed_file = os.path.join(config["out_dir"], "resources", "genomic.bed")
     output:
-        os.path.join(config["out_dir"], "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned_sorted.fastq.gz")
+        os.path.join(config["out_dir"], "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned_sorted.bam")
     log:
         os.path.join(config["out_dir"], "logs", "{run}", "c0ii-genome-alignments", "{barcode}.log")
-    params:
-        mmi_file = os.path.join(config["out_dir"], "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi")
-        bed_file = os.path.join(config["out_dir"], "resources", "genomic.bed")
 
     conda:
         "../envs/minimap2.yaml"
@@ -36,21 +35,28 @@ rule align_to_genome:
             echo "======== Total Threads: {resources[samtools_threads]}"
 
             minimap2 \
-                {params[mmi_file]} \    # indexed .mmi file of the refseq .fna file (saves a few minutes for minimap2)
-                {input} \
+                {input[mmi_file]} \
+                {input[input_fastq]} \
                 -a -x splice \
                 -uf \
                 --secondary=yes \
                 -Y \
                 --MD \
                 -t {resources[minimap2_threads]} \
-                --junc-bed {params[bed_file]} | \
+                --junc-bed {input[bed_file]} | \
             samtools \
                 sort \
                 -@ {resources[samtools_threads]} \
-                -m 8G \
+                -m 4G \
                 -o {output}
 
-        echo "======= PROCESS COMPLETED (minimap2 genome alignment): {wildcards.run}--{wildcards.barcode}"
-        )
+            echo "======= alignment complete - indexing sorted bam file"
+
+            samtools \
+                index \
+                -@ {resources[cpus_per_task]} \
+                {output}
+            
+            echo "======= PROCESS COMPLETED (minimap2 genome alignment): {wildcards.run}--{wildcards.barcode}"
+        ) > {log} 2>&1
         """

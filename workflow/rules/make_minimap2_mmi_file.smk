@@ -7,7 +7,7 @@ rule make_minimap2_mmi_file:
     input:
         os.path.join(config["ref_dir"], "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.fna")
     output:
-        os.path.join(confi["out_dir"], "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi")
+        os.path.join(config["out_dir"], "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi")
     log:
         os.path.join(config["out_dir"], "logs", "resources", "make_minimap2_mmi_file.log")
     conda:
