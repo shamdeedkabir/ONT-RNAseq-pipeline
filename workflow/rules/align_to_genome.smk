@@ -13,7 +13,7 @@ rule align_to_genome:
     input:
         os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
     output:
-        os.path.join(config["out_dir"], "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned.fastq.gz")
+        os.path.join(config["out_dir"], "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned_sorted.fastq.gz")
     log:
         os.path.join(config["out_dir"], "logs", "{run}", "c0ii-genome-alignments", "{barcode}.log")
     params:
@@ -44,7 +44,12 @@ rule align_to_genome:
                 -Y \
                 --MD \
                 -t {resources[minimap2_threads]} \
-                --junc-bed {params[bed_file]}     
+                --junc-bed {params[bed_file]} | \
+            samtools \
+                sort \
+                -@ {resources[samtools_threads]} \
+                -m 8G \
+                -o {output}
 
         echo "======= PROCESS COMPLETED (minimap2 genome alignment): {wildcards.run}--{wildcards.barcode}"
         )
