@@ -46,3 +46,11 @@ set-resources:
     total_cpus: 16
     minimap2_threads: 12
     samtools_threads: 4
+  flagstat_genome_alignment:
+    cpus_per_task: 4
+    total_cpus: 4
+    samtools_threads: 4
+  flagstat_transcriptome_alignment:
+    cpus_per_task: 4
+    total_cpus: 4
+    samtools_threads: 4
