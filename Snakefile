@@ -23,7 +23,7 @@ def discover_run_barcode_pairs(in_dir):
 
     pairs = []
     for run in runs:
-        run_path = os.path.join(in_dir, run)
+        run_path = os.path.join(in_dir, run, "fastq_pass")
         barcodes = sorted(
             d for d in os.listdir(run_path)
             if os.path.isdir(os.path.join(run_path, d)) and d.startswith("barcode")
