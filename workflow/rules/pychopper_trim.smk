@@ -15,6 +15,9 @@ rule pychopper_trim:
     shell:
         """
         (
+            echo "++++++++++++++++++++++++++++ pychopper threads: {resources[pychopper_threads]}"
+            echo "++++++++++++++++++++++++++++ pigz threads: {resources[pigz_threads]}"
+
             pychopper \
                 -k PCB114 \
                 -r {params[report_file]} \

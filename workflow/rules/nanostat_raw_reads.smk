@@ -10,6 +10,8 @@ rule nanostat_raw_reads:
     shell:
         """
         (
+            echo "++++++++++++++++++++++++++++ nanostat threads: {resources[samtools_threads]}"
+            
             NanoStat \
                 --fastq {config[out_dir]}/{wildcards.run}/a0-concat-fastq/{wildcards.barcode}_concatenated.fastq.gz \
                 --outdir {config[out_dir]}/{wildcards.run}/a1-nanostat-raw-reads \

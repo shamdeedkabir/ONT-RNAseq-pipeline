@@ -10,15 +10,15 @@ rule align_to_transcriptome:
     shell:
         """
         (
+            echo "++++++++++++++++++++++++++++ total threads: {resources[cpus_per_task]}"
+            echo "++++++++++++++++++++++++++++ minimap2 threads: {resources[minimap2_threads]}"
+            echo "++++++++++++++++++++++++++++ samtools threads: {resources[samtools_threads]}"
+
             echo "======== minimap2 version:"
             minimap2 --version
         
             echo "======== samtools version:"
             samtools --version
-
-            echo "======== Total Threads: {resources[cpus_per_task]}"
-            echo "======== Total Threads: {resources[minimap2_threads]}"
-            echo "======== Total Threads: {resources[samtools_threads]}"
 
             minimap2 \
                 -ax map-ont \

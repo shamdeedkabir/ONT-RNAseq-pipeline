@@ -15,6 +15,8 @@ rule make_minimap2_mmi_file:
     shell:
         """
         (
+            echo "++++++++++++++++++++++++++++ minimap2 threads: {resources[cpus_per_task]}"
+            
             echo "======== minimap2 version:"
             minimap2 --version
             

@@ -10,6 +10,8 @@ rule flagstat_genome_alignment:
     shell:
         """
         (
+            echo "++++++++++++++++++++++++++++ samtools threads: {resources[samtools_threads]}"
+
             samtools \
                 flagstat \
                 -@ {resources[samtools_threads]} \

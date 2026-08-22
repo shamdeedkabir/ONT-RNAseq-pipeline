@@ -10,6 +10,8 @@ rule oarfish_quant_transcriptome_aligned:
     shell:
         """
         (
+            echo "++++++++++++++++++++++++++++ oarfish threads: {resources[oarfish_threads]}"
+
             echo "========== oarfish version:"
             oarfish --version
 
