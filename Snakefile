@@ -43,12 +43,12 @@ rule all:
                zip, run=RUNS_LIST, barcode=BARCODES_LIST),
         expand(os.path.join(OUT_DIR, "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
                zip, run=RUNS_LIST, barcode=BARCODES_LIST),
-        expand(os.path.join(OUT_DIR, "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"),
-               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
-        expand(os.path.join(OUT_DIR, "{run}", "c1i-flagstat-transcriptome-alignments", "{barcode}_flagstat_transcriptome_alignment.txt"),
-               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
-        expand(os.path.join(OUT_DIR, "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"),
-               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+       #  expand(os.path.join(OUT_DIR, "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"),
+       #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+       #  expand(os.path.join(OUT_DIR, "{run}", "c1i-flagstat-transcriptome-alignments", "{barcode}_flagstat_transcriptome_alignment.txt"),
+       #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+       #  expand(os.path.join(OUT_DIR, "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"),
+       #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
         os.path.join(OUT_DIR, "resources", "genomic.bed"),
         os.path.join(OUT_DIR, "resources", "genomic.bed"),
         os.path.join(OUT_DIR, "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi"),
@@ -61,11 +61,11 @@ rule all:
 include: "workflow/rules/cat_reads.smk"
 include: "workflow/rules/nanostat_raw_reads.smk"
 include: "workflow/rules/pychopper_trim.smk"
-include: "workflow/rules/align_to_transcriptome.smk"
-include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
+# include: "workflow/rules/align_to_transcriptome.smk"
+# include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
 include: "workflow/rules/make_minimap2_junc_bed_file.smk"
 include: "workflow/rules/make_minimap2_mmi_file.smk"
 include: "workflow/rules/align_to_genome.smk"
-include: "workflow/rules/flagstat_transcriptome_alignment.smk"
+# include: "workflow/rules/flagstat_transcriptome_alignment.smk"
 include: "workflow/rules/flagstat_genome_alignment.smk"
 include: "workflow/rules/compile_qc.smk"
