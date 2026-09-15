@@ -23,7 +23,7 @@ def filter_qc(qc_file_dir, nanostat_num_reads, nanostat_length_n50, pychopper_pr
 
 def create_isoquant_yaml(source_dir, df):
     file_paths = [
-        f"{source_dir}/{row['run']}/c1ii-flagstat-genome-alignments/{row['barcode']}_minimap2_genome_aligned_sorted.bam"
+        f"{source_dir}/{row['run']}/c0ii-genome-alignments/{row['barcode']}_minimap2_genome_aligned_sorted.bam"
         for _, row in df.iterrows()
     ]
     labels = [f"{row['run']}_{row['barcode']}" for _, row in df.iterrows()]

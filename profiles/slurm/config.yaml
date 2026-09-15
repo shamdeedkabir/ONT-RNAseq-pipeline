@@ -13,7 +13,7 @@ printshellcmds: true
 
 default-resources:      # all rules so far has their on resource allocation
   mem_mb: 8000          # memory per task: 8G
-  runtime: 1200
+  runtime: 120000
   cpus_per_task: 12
   total_cpus: 12
   slurm_partition: "batch"
@@ -54,3 +54,7 @@ set-resources:
     cpus_per_task: 4
     total_cpus: 4
     samtools_threads: 4
+  isoquant_joint_discovery:
+    cpus_per_task: 32
+    total_cpus: 32
+    mem_mb: 256000
