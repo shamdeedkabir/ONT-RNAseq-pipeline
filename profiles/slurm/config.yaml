@@ -61,5 +61,5 @@ set-resources:
   sqanti_qc_ncbi:
     cpus_per_task: 24
     total_cpus: 24
-    mem_mb: 32000
+    mem_mb: 48000
   

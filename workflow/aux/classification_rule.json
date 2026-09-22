@@ -1,0 +1,64 @@
+{
+    "full-splice_match": [
+        {
+            "source_label":"keep"
+        },
+        {
+            "perc_A_downstream_TTS":[0,59],
+            "RTS_stage":"FALSE",
+            "subcategory": ["alternative_3end", "alternative_5end", "alternative_3end5end"],
+            "N_samples": [10, 12],
+            "source_label":"isoquant"
+        }
+    ],
+    "incomplete-splice_match":[
+        {
+            "source_label":"keep"
+        },
+        {
+            "perc_A_downstream_TTS": [0, 39],
+            "RTS_stage":"FALSE",
+            "subcategory": ["3prime_fragment", "5prime_fragment"],
+            "N_samples": [10, 12],
+            "source_label":"isoquant"
+        }
+    ],
+    "novel_in_catalog":[
+        {
+            "source_label":"keep"
+        },
+        {
+            "perc_A_downstream_TTS":[0,59],
+            "RTS_stage":"FALSE",
+            "all_canonical": "canonical",
+            "N_samples": [6, 12],
+            "source_label":"isoquant"
+        }
+    ],
+    "novel_not_in_catalog":[
+        {
+            "source_label":"keep"
+        },
+        {
+            "perc_A_downstream_TTS":[0,59],
+            "RTS_stage":"FALSE",
+            "all_canonical": "canonical",
+            "diff_to_gene_TSS":[-50,50],
+            "diff_to_gene_TTS": [-50,50],
+            "N_samples": [6, 12],
+            "source_label":"isoquant"           
+        }
+    ],
+    "rest": [
+        {
+            "source_label":"keep"
+        },
+        {
+            "perc_A_downstream_TTS":[0,39],
+            "RTS_stage":"FALSE",
+            "all_canonical":"canonical",
+            "N_samples": [10, 12],
+            "source_label":"isoquant"
+        }
+     ]
+}

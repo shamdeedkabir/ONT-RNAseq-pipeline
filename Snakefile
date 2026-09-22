@@ -158,14 +158,14 @@ rule all:
         
         
         sqanti_outs = [
-            os.path.join(config["out_dir"], "resources" ,"sqanti3_out", "sqanti3_qc", "sqanti3_results_classification.txt"),
-            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.cds.gff3"),
-            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.faa"),
-            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.fasta"),
-            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.genePred"),
-            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.gtf"),
-            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_junctions.txt"),
-            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_SQANTI3_report.html"),
+            os.path.join(config["out_dir"], "resources" ,"sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.cds.gff3"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.faa"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.fasta"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.genePred"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.gtf"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_junctions.txt"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_SQANTI3_report.html")
         ]
 
 
