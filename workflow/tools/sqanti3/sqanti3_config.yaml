@@ -1,0 +1,83 @@
+main:
+  refGTF: ''
+  refFasta: ''
+  cpus: 4
+  dir: sqanti3_results
+  output: isoforms
+  log_level: INFO
+qc:
+  enabled: true
+  options:
+    isoforms: ''
+    min_ref_len: 0
+    fasta: false
+    genename: false
+    novel_gene_prefix: ''
+    sites: ATAC,GCAG,GTAG
+    window: 20
+    aligner_choice: minimap2
+    gmap_index: ''
+    include_ORF: false
+    orf_input: ''
+    psauron_threshold: 0.5
+    short_reads: ''
+    SR_bam: ''
+    CAGE_peak: ''
+    polyA_motif_list: ''
+    polyA_peak: ''
+    phyloP_bed: ''
+    expression: ''
+    coverage: ''
+    fl_count: ''
+    isoAnnotLite: false
+    gff3: ''
+    saturation: false
+    report: html
+    isoform_hits: false
+    ratio_TSS_metric: max
+    chunks: 1
+    is_fusion: false
+    tusco: ''
+filter:
+  enabled: true
+  options:
+    common:
+      sqanti_class: sqanti3_results/isoforms_classification.txt
+      isoAnnotGFF3: ''
+      filter_isoforms: sqanti3_results/isoforms_corrected.fasta
+      filter_gtf: sqanti3_results/isoforms_corrected.gtf
+      filter_sam: ''
+      filter_faa: ''
+      skip_report: false
+      filter_mono_exonic: false
+    rules:
+      enabled: true
+      options:
+        json_filter: /home/pabloati/Programs/sqanti3/src/utilities/filter/filter_default.json
+    ml:
+      enabled: false
+      options:
+        percent_training: 0.8
+        TP: ''
+        TN: ''
+        threshold: 0.7
+        force_fsm_in: false
+        intermediate_files: false
+        remove_columns: ''
+        max_class_size: 3000
+        intrapriming: 60
+rescue:
+  enabled: true
+  options:
+    filter_class: sqanti3_results/isoforms_RulesFilter_classification.txt
+    corrected_isoforms_fasta: sqanti3_results/isoforms_corrected.fasta
+    filtered_isoforms_gtf: sqanti3_results/isoforms.filtered.gtf
+    refClassif: ''
+    counts: ''
+    rescue_mono_exonic: all
+    mode: automatic
+    requant: false
+    strategy: rules
+    json_filter: /home/pabloati/Programs/sqanti3/src/utilities/filter/filter_default.json
+    random_forest: sqanti3_results/isoformsrandomforest.RData
+    threshold: 0.7

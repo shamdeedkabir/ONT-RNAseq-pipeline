@@ -154,7 +154,19 @@ rule all:
     input:
         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.tsv"), 
         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.yaml"),
-        directory(os.path.join(config["out_dir"], "resources", "isoquant_out"))
+        directory(os.path.join(config["out_dir"], "resources", "isoquant_out")),
+        
+        
+        sqanti_outs = [
+            os.path.join(config["out_dir"], "resources" ,"sqanti3_out", "sqanti3_qc", "sqanti3_results_classification.txt"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.cds.gff3"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.faa"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.fasta"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.genePred"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_corrected.gtf"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_junctions.txt"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc", "sqanti3_results_SQANTI3_report.html"),
+        ]
 
 
 # rule all:
@@ -211,3 +223,5 @@ rule all:
 include: "workflow/rules/qc_filter_samples.smk"
 
 include: "workflow/rules/isoquant_joint_discovery.smk"
+
+include: "workflow/rules/sqanti_qc_ncbi.smk"

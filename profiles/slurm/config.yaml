@@ -57,4 +57,9 @@ set-resources:
   isoquant_joint_discovery:
     cpus_per_task: 32
     total_cpus: 32
-    mem_mb: 256000
+    mem_mb: 2000000
+  sqanti_qc_ncbi:
+    cpus_per_task: 24
+    total_cpus: 24
+    mem_mb: 32000
+  

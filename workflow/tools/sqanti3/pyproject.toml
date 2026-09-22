@@ -1,0 +1,15 @@
+[tool.pytest.ini_options]
+addopts = "-v --tb=long"
+collect_ignore = [
+    "test/test_argparser.py",
+    "test/integration/test_tusco.py",
+    "test/unit/test_computations.py",
+]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+]
+
+[tool.pyright]
+extraPaths = [".", "/home/pabloati/miniforge3/envs/sqanti3/lib/python3.11/site-packages"]
+venvPath = "/home/pabloati/miniforge3/envs"
+venv = "sqanti3"
