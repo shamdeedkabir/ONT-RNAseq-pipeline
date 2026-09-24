@@ -4,7 +4,8 @@ rule isoquant_joint_discovery:
         reference_fasta = os.path.join(config["ref_dir"], "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.fna"),
         reference_gtf = os.path.join(config["ref_dir"], "genomic.gtf")
     output:
-        directory(os.path.join(config["out_dir"], "resources", "isoquant_out"))
+        directory(os.path.join(config["out_dir"], "resources", "isoquant_out")),
+        os.path.join(config["out_dir"], "resources", "isoquant_out", "USDA_RNA_seq", "USDA_RNA_seq.extended_annotation.gtf")
     log:
         os.path.join(config["out_dir"], "logs", "resources", "isoquant_joint_discovery.log")
     conda:
