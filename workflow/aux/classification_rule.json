@@ -2,12 +2,6 @@
     "full-splice_match": [
         {
             "source_label":"keep"
-        },
-        {
-            "perc_A_downstream_TTS":[0,59],
-            "subcategory": ["alternative_3end", "alternative_5end", "alternative_3end5end"],
-            "N_samples": [50, 10000],
-            "source_label":"isoquant"
         }
     ],
     "incomplete-splice_match":[
@@ -16,9 +10,11 @@
         },
         {
             "perc_A_downstream_TTS": [0, 39],
-            "subcategory": ["3prime_fragment", "5prime_fragment", "intron_retention"],
+            "RTS_stage":"FALSE",
+            "subcategory": ["5prime_fragment", "intron_retention"],
             "N_samples": [50, 10000],
-            "source_label":"isoquant"
+            "source_label":"isoquant",
+            "exons": [2, 1000]
         }
     ],
     "novel_in_catalog":[
@@ -27,10 +23,12 @@
         },
         {
             "perc_A_downstream_TTS":[0,59],
+            "RTS_stage":"FALSE",
             "subcategory": ["intron_retention", "combination_of_known_splicesites", "combination_of_known_junctions"],
             "all_canonical": "canonical",
-            "N_samples": [25, 10000],
-            "source_label":"isoquant"
+            "N_samples": [50, 10000],
+            "source_label":"isoquant",
+            "exons": [2, 1000]
         }
     ],
     "novel_not_in_catalog":[
@@ -43,8 +41,9 @@
             "all_canonical": "canonical",
             "diff_to_gene_TSS":[-50,50],
             "diff_to_gene_TTS": [-50,50],
-            "N_samples": [100, 10000],
-            "source_label":"isoquant"           
+            "N_samples": [75, 10000],
+            "source_label":"isoquant",
+            "exons": [2, 1000]           
         }
     ],
     "rest": [
@@ -55,8 +54,9 @@
             "perc_A_downstream_TTS":[0,39],
             "RTS_stage":"FALSE",
             "all_canonical":"canonical",
-            "N_samples": [100, 10000],
-            "source_label":"isoquant"
+            "N_samples": [75, 10000],
+            "source_label":"isoquant",
+            "exons": [2, 1000]
         }
      ]
 }
