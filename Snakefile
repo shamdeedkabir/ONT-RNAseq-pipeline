@@ -152,10 +152,38 @@ BARCODES_LIST = [p[1] for p in RUN_BARCODE_PAIRS]
 
 rule all:
     input:
+    #     ## PRE-ALIGNMENT (REQUIRED)
+    #     expand(os.path.join(OUT_DIR, "{run}", "a0-concat-fastq", "{barcode}_concatenated.fastq.gz"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+    #     expand(os.path.join(OUT_DIR, "{run}", "a1-nanostat-raw-reads", "{barcode}_raw_read_nanostat.txt"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+    #     expand(os.path.join(OUT_DIR, "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+       
+    #    ## TRANSCRIPTOME ALIGNMENT
+    #     expand(os.path.join(OUT_DIR, "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+    #     expand(os.path.join(OUT_DIR, "{run}", "c1i-flagstat-transcriptome-alignments", "{barcode}_flagstat_transcriptome_alignment.txt"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+    #     expand(os.path.join(OUT_DIR, "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        
+    #     ## GENOME ALIGNMENT
+    #     os.path.join(OUT_DIR, "resources", "genomic.bed"),
+    #     os.path.join(OUT_DIR, "resources", "genomic.bed"),
+    #     os.path.join(OUT_DIR, "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi"),
+    #     expand(os.path.join(OUT_DIR, "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned_sorted.bam"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+    #     expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
+    #            zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+
+
+
+
+        #MAIN-BODY
         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.tsv"), 
         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.yaml"),
         directory(os.path.join(config["out_dir"], "resources", "isoquant_out")),
-        
         
         sqanti_qc_ncbi_outs = [
             os.path.join(config["out_dir"], "resources" ,"sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt"),
