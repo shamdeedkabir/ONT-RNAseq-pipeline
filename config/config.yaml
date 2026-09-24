@@ -9,3 +9,4 @@ out_dir: "/work/kabir/USDA-RNA-seq-data-all-hatches-pipeline-output"
 # directory to the the reference genome/transcriptome folder
 ##### required in the directory: genome.fna, genome.gtf, rna.fna
 ref_dir: "/home/kabir/GalGal-ref/ncbi.Genome_assembly.bGalGal1.mat.broiler.GRCg7b/ncbi_dataset/data/GCF_016699485.2"
+gega_gtf: "/home/kabir/GalGal-ref/GEGA-ref-annot/chr-renamed/GEGA_renamed_with_ncbi_contigs_cleaned_attributes.gtf"

@@ -23,10 +23,6 @@ rule sqanti_qc_ncbi:
         (
             echo "++++++++++++++++++++++++++++ total threads: {resources[cpus_per_task]}"
             echo "======== SQANTI3 version:"
-            
-            # rm -rf {params[sqanti_out_dir]}
-            # mkdir -p {params[sqanti_out_dir]}
-            # cd {params[sqanti_out_dir]}
 
             python workflow/tools/sqanti3/sqanti3_qc.py \
                 --isoforms {input[isoquant_gtf]} \

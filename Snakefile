@@ -157,7 +157,7 @@ rule all:
         directory(os.path.join(config["out_dir"], "resources", "isoquant_out")),
         
         
-        sqanti_outs = [
+        sqanti_qc_ncbi_outs = [
             os.path.join(config["out_dir"], "resources" ,"sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt"),
             os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.cds.gff3"),
             os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.faa"),
@@ -166,7 +166,14 @@ rule all:
             os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.gtf"),
             os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_junctions.txt"),
             os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_SQANTI3_report.html")
-        ]
+        ],
+        sqanti_filter = [
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_qc_on_ncbi_classification_N_samples.txt"),
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_results", "sqanti_qc_filtered.filtered.gtf")
+        ],
+        sqanti_qc_gega_outs = [
+            os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti_qc_on_gega", "sqanti_qc_on_filtered_ncbi_against_gega_SQANTI3_report.html")
+        ],
 
 
 # rule all:
@@ -225,3 +232,5 @@ include: "workflow/rules/qc_filter_samples.smk"
 include: "workflow/rules/isoquant_joint_discovery.smk"
 
 include: "workflow/rules/sqanti_qc_ncbi.smk"
+include: "workflow/rules/sqanti_filter.smk"
+include: "workflow/rules/sqanti_qc_filtered_ncbi_on_gega.smk"
