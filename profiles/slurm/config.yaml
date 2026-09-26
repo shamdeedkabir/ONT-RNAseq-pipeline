@@ -1,6 +1,6 @@
 # usage: snakemake --profile profiles/slurm
 executor: slurm
-jobs: 24               # max concurrent jobs in slurm
+jobs: 200               # max concurrent jobs in slurm
 
 resources:
   total_cpus: 192      # max cpu usage at any given time

@@ -11,6 +11,7 @@ logs/
 *.fastq.gz
 *.fastq
 *.log
+.slurm
 
 __pycache__/
 .DS_Store

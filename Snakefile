@@ -152,6 +152,7 @@ BARCODES_LIST = [p[1] for p in RUN_BARCODE_PAIRS]
 
 rule all:
     input:
+        # Main BODY
         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.tsv"), 
         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.yaml"),
         directory(os.path.join(config["out_dir"], "resources", "isoquant_out")),
@@ -174,6 +175,19 @@ rule all:
         sqanti_qc_gega_outs = [
             os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti_qc_on_gega", "sqanti_qc_on_filtered_ncbi_against_gega_SQANTI3_report.html")
         ],
+
+        gffread_extended_transcriptome = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti_extended_transcriptome.fa"),
+
+        transcriptome_align = expand(os.path.join(OUT_DIR, "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        flagstat_transcriptome_align = expand(os.path.join(OUT_DIR, "{run}", "c1i-flagstat-transcriptome-alignments", "{barcode}_flagstat_transcriptome_alignment.txt"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        oarfish_quant = expand(os.path.join(OUT_DIR, "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+
+
+
+
 
 
 # rule all:
@@ -217,8 +231,8 @@ rule all:
 # include: "workflow/rules/nanostat_raw_reads.smk"
 # include: "workflow/rules/pychopper_trim.smk"
 
-# include: "workflow/rules/align_to_transcriptome.smk"
-# include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
+
+
 # include: "workflow/rules/flagstat_transcriptome_alignment.smk"
 
 # include: "workflow/rules/make_minimap2_junc_bed_file.smk"
@@ -234,3 +248,9 @@ include: "workflow/rules/isoquant_joint_discovery.smk"
 include: "workflow/rules/sqanti_qc_ncbi.smk"
 include: "workflow/rules/sqanti_filter.smk"
 include: "workflow/rules/sqanti_qc_filtered_ncbi_on_gega.smk"
+
+include: "workflow/rules/gffread_build_extended_transcriptome.smk"
+
+include: "workflow/rules/align_to_transcriptome.smk"
+include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
+include: "workflow/rules/flagstat_transcriptome_alignment.smk"

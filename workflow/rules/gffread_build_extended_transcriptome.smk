@@ -13,8 +13,6 @@ rule gffread_build_extended_transcriptome:
         """
         (
             echo "++++++++++++++++++++++++++++ total threads: {resources[cpus_per_task]}"
-            echo "======== gffread version:" 
-            gffread -v
 
             gffread \
                 {input[filtered_gtf]} \
