@@ -1,6 +1,7 @@
 rule sqanti_filter:
     input:
-        os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt")
+        classification = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt"),
+        isoquant_dir = rules.isoquant_joint_discovery.output[0]
     output:
         sqanti_extended_classification = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_qc_on_ncbi_classification_N_samples.txt"),
         filtered_gtf = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_results", "sqanti_qc_filtered.filtered.gtf")
@@ -11,7 +12,6 @@ rule sqanti_filter:
         isoquant_extended_gtf = os.path.join(config["out_dir"], "resources", "isoquant_out", "USDA_RNA_seq", "USDA_RNA_seq.extended_annotation.gtf"),
         tx_N_counts = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "isoquant_tx_N_counts.txt"),
         source_labels = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "gtf_source_labels.txt"),
-        sqanti_corrected_gtf = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.gtf"),
         out_dir = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_results"),
         json_filter = "workflow/aux/classification_rule.json"
     conda:
@@ -27,7 +27,7 @@ rule sqanti_filter:
             workflow/scripts/aggregate_isoquant_N_samples.sh \
                 --transcript-counts {params[isoquant_tx_counts]} \
                 --isoquant-gtf {params[isoquant_extended_gtf]} \
-                --classification {input} \
+                --classification {input[classification]} \
                 --output-ncounts {params[tx_N_counts]} \
                 --output-source-labels {params[source_labels]} \
                 --output-classification {output[sqanti_extended_classification]}
@@ -38,7 +38,7 @@ rule sqanti_filter:
             python workflow/tools/sqanti3/sqanti3_filter.py \
                 rules \
                 --sqanti_class {output[sqanti_extended_classification]} \
-                --filter_gtf {params[sqanti_corrected_gtf]} \
+                --filter_gtf {input[sqanti_corrected_gtf]} \
                 -d {params[out_dir]} \
                 -o sqanti_qc_filtered \
                 -c {resources[cpus_per_task]} \

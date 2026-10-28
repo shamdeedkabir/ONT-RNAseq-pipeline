@@ -1,6 +1,6 @@
 rule sqanti_qc_ncbi:
     input:
-        isoquant_gtf = os.path.join(config["out_dir"], "resources", "isoquant_out", "USDA_RNA_seq", "USDA_RNA_seq.extended_annotation.gtf"),
+        isoquant_dir = rules.isoquant_joint_discovery.output[0],
         ncbi_gtf = os.path.join(config["ref_dir"], "genomic.gtf"),
         ncbi_fasta = os.path.join(config["ref_dir"], "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.fna")
     output:
@@ -15,6 +15,7 @@ rule sqanti_qc_ncbi:
     log:
         os.path.join(config["out_dir"], "logs", "resources", "sqanti_qc_ncbi.log")
     params:
+        isoquant_gtf = os.path.join(config["out_dir"], "resources", "isoquant_out", "USDA_RNA_seq", "USDA_RNA_seq.extended_annotation.gtf"),
         sqanti_out_dir = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi")
     conda:
         "../envs/SQANTI3.conda_env.yml"
@@ -25,7 +26,7 @@ rule sqanti_qc_ncbi:
             echo "======== SQANTI3 version:"
 
             python workflow/tools/sqanti3/sqanti3_qc.py \
-                --isoforms {input[isoquant_gtf]} \
+                --isoforms {params[isoquant_gtf]} \
                 --refGTF {input[ncbi_gtf]} \
                 --refFasta {input[ncbi_fasta]} \
                 -t {resources[cpus_per_task]} \

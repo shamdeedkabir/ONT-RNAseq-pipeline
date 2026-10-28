@@ -1,12 +1,11 @@
 rule align_to_transcriptome:
     input:
-        os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
+        reads = os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
+        gffread_extended_transcriptome = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti_extended_transcriptome.fa")
     output:
         os.path.join(config["out_dir"], "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
     log:
         os.path.join(config["out_dir"], "logs", "{run}", "c0i-aligned-to-transcriptome", "{barcode}.log")
-    params:
-        gffread_extended_transcriptome = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti_extended_transcriptome.fa"),
     conda:
         "../envs/minimap2.yaml"
     shell:
@@ -27,8 +26,8 @@ rule align_to_transcriptome:
                 -N 100 \
                 --eqx \
                 -t {resources[minimap2_threads]} \
-                {params[gffread_extended_transcriptome]} \
-                {input} | \
+                {input[gffread_extended_transcriptome]} \
+                {input[reads]} | \
             samtools \
                 view \
                 -@ {resources[samtools_threads]} \

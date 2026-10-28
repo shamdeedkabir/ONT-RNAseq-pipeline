@@ -1,6 +1,10 @@
 rule compile_qc:
     input:
-        expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
+        nanostat = expand(os.path.join(OUT_DIR, "{run}", "a1-nanostat-raw-reads", "{barcode}_raw_read_nanostat.txt"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        pychopper = expand(os.path.join(OUT_DIR, "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
+               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+        flagstat = expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
                zip, run=RUNS_LIST, barcode=BARCODES_LIST)
     output:
         os.path.join(config["out_dir"], "resources", "nanostat_pychopper_flagstatGenomic_read_qc.tsv")

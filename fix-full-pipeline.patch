@@ -1,0 +1,403 @@
+diff --git a/Snakefile b/Snakefile
+--- a/Snakefile	2026-10-28 21:36:18.980390108 +0000
++++ b/Snakefile	2026-10-28 21:56:16.606569223 +0000
+@@ -1,115 +1,3 @@
+-# # Usage
+-# # snakemake --profile profiles/slurm --use-conda
+-# # OPTIONAL:
+-# #   --rerun-trigger mtime: this uses modification time to determine whether to run rules
+-
+-# import os
+-
+-# configfile: "config/config.yaml"
+-
+-# IN_DIR = config["in_dir"]
+-# OUT_DIR= config["out_dir"]
+-
+-# # wildcard_constraints:
+-# #     run     = r"[^/]+",
+-# #     barcode = r"barcode\d+"
+-
+-# # def discover_run_barcode_pairs(in_dir):
+-# #     """Scan in_dir for run folders, and within each, barcode folders."""
+-# #     runs = sorted(
+-# #         d for d in os.listdir(in_dir)
+-# #         if os.path.isdir(os.path.join(in_dir, d))
+-# #     )
+-
+-# #     pairs = []
+-# #     for run in runs:
+-# #         run_path = os.path.join(in_dir, run, "fastq_pass")
+-# #         barcodes = sorted(
+-# #             d for d in os.listdir(run_path)
+-# #             if os.path.isdir(os.path.join(run_path, d)) and d.startswith("barcode")
+-# #         )
+-# #         pairs.extend((run, bc) for bc in barcodes)
+-# #     return pairs
+-
+-# # RUN_BARCODE_PAIRS = discover_run_barcode_pairs(IN_DIR)
+-# # RUNS_LIST     = [p[0] for p in RUN_BARCODE_PAIRS]
+-# # BARCODES_LIST = [p[1] for p in RUN_BARCODE_PAIRS]
+-
+-
+-# rule all:
+-#     input:
+-#         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.tsv"), 
+-#         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.yaml")
+-
+-
+-# # rule all:
+-#     # input:
+-#         ### PRE-ALIGNMENT (REQUIRED)
+-#         # expand(os.path.join(OUT_DIR, "{run}", "a0-concat-fastq", "{barcode}_concatenated.fastq.gz"),
+-#         #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-#         # expand(os.path.join(OUT_DIR, "{run}", "a1-nanostat-raw-reads", "{barcode}_raw_read_nanostat.txt"),
+-#         #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-#         # expand(os.path.join(OUT_DIR, "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
+-#         #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-       
+-#        ### TRANSCRIPTOME ALIGNMENT
+-#        #  expand(os.path.join(OUT_DIR, "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"),
+-#        #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-#        #  expand(os.path.join(OUT_DIR, "{run}", "c1i-flagstat-transcriptome-alignments", "{barcode}_flagstat_transcriptome_alignment.txt"),
+-#        #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-#        #  expand(os.path.join(OUT_DIR, "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"),
+-#        #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-        
+-#         ### GENOME ALIGNMENT
+-#         # os.path.join(OUT_DIR, "resources", "genomic.bed"),
+-#         # os.path.join(OUT_DIR, "resources", "genomic.bed"),
+-#         # os.path.join(OUT_DIR, "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi"),
+-#         # expand(os.path.join(OUT_DIR, "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned_sorted.bam"),
+-#         #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-#         # expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
+-#         #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-        
+-#         ### SAMPLE QC
+-#         # os.path.join(OUT_DIR, "resources", "nanostat_pychopper_flagstatGenomic_read_qc.tsv"),
+-#         # os.path.join(config["out_dir"], "resources", "qc_filtered_samples.tsv"), 
+-#         # os.path.join(config["out_dir"], "resources", "qc_filtered_samples.yaml")
+-
+-#         ### ISOQUANT
+-
+-
+-
+-
+-# # include: "workflow/rules/cat_reads.smk"
+-# # include: "workflow/rules/nanostat_raw_reads.smk"
+-# # include: "workflow/rules/pychopper_trim.smk"
+-
+-# # include: "workflow/rules/align_to_transcriptome.smk"
+-# # include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
+-# # include: "workflow/rules/flagstat_transcriptome_alignment.smk"
+-
+-# # include: "workflow/rules/make_minimap2_junc_bed_file.smk"
+-# # include: "workflow/rules/make_minimap2_mmi_file.smk"
+-# # include: "workflow/rules/align_to_genome.smk"
+-# # include: "workflow/rules/flagstat_genome_alignment.smk"
+-
+-# # include: "workflow/rules/compile_qc.smk"
+-# include: "workflow/rules/qc_filter_samples.smk"
+-
+-# include: "workflow/rules/isoquant_joint_discovery.smk"
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ # Usage
+ # snakemake --profile profiles/slurm --use-conda
+ # OPTIONAL:
+@@ -126,26 +14,37 @@
+     run     = r"[^/]+",
+     barcode = r"barcode\d+"
+ 
+-def discover_run_barcode_pairs(out_dir):
+-    """Scan in_dir for run folders, and within each, barcode folders."""
+-    runs = sorted(
+-        d for d in os.listdir(out_dir)
+-        if os.path.isdir(os.path.join(out_dir, d)) and d.startswith("hatch")
+-    )
+-
+-    pairs = []
+-    for run in runs:
+-        run_path = os.path.join(out_dir, run, "c0ii-genome-alignments")
+-        if os.path.exists(run_path):
+-            barcodes = sorted(
+-                f.split("_")[0]
+-                for f in os.listdir(run_path)
+-                if f.endswith(".bam") and os.path.isfile(os.path.join(run_path, f))
+-            )
+-            pairs.extend((run, bc) for bc in barcodes)
+-    return pairs
++FASTQ_EXTS = (".fastq", ".fastq.gz", ".fq", ".fq.gz")
+ 
+-RUN_BARCODE_PAIRS = discover_run_barcode_pairs(OUT_DIR)
++def discover_run_barcode_pairs(in_dir, out_dir):
++    """Collect (run, barcode) samples from two places, skipping anything missing:
++      1. raw reads:          {in_dir}/hatch*/fastq_pass/barcode*/  (only if they still have FASTQs)
++      2. concatenated reads: {out_dir}/hatch*/a0-concat-fastq/barcode*_concatenated.fastq.gz
++    so the workflow still parses after raw FASTQs have been deleted."""
++    pairs = set()
++
++    if os.path.isdir(in_dir):
++        for run in os.listdir(in_dir):
++            fq_pass = os.path.join(in_dir, run, "fastq_pass")
++            if not (run.startswith("hatch") and os.path.isdir(fq_pass)):
++                continue
++            for bc in os.listdir(fq_pass):
++                bc_dir = os.path.join(fq_pass, bc)
++                if (bc.startswith("barcode") and os.path.isdir(bc_dir)
++                        and any(f.endswith(FASTQ_EXTS) for f in os.listdir(bc_dir))):
++                    pairs.add((run, bc))
++
++    if os.path.isdir(out_dir):
++        for run in os.listdir(out_dir):
++            cat_dir = os.path.join(out_dir, run, "a0-concat-fastq")
++            if run.startswith("hatch") and os.path.isdir(cat_dir):
++                for f in os.listdir(cat_dir):
++                    if f.endswith("_concatenated.fastq.gz"):
++                        pairs.add((run, f.split("_")[0]))
++
++    return sorted(pairs)
++
++RUN_BARCODE_PAIRS = discover_run_barcode_pairs(IN_DIR, OUT_DIR)
+ RUNS_LIST     = [p[0] for p in RUN_BARCODE_PAIRS]
+ BARCODES_LIST = [p[1] for p in RUN_BARCODE_PAIRS]
+ 
+@@ -163,7 +62,6 @@
+ 
+         ### GENOME ALIGNMENT
+         os.path.join(OUT_DIR, "resources", "genomic.bed"),
+-        os.path.join(OUT_DIR, "resources", "genomic.bed"),
+         os.path.join(OUT_DIR, "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi"),
+         expand(os.path.join(OUT_DIR, "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned_sorted.bam"),
+                zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+@@ -172,7 +70,7 @@
+         
+         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.tsv"), 
+         os.path.join(config["out_dir"], "resources", "qc_filtered_samples.yaml"),
+-        directory(os.path.join(config["out_dir"], "resources", "isoquant_out")),
++        os.path.join(config["out_dir"], "resources", "isoquant_out"),
+         
+         sqanti_qc_ncbi_outs = [
+             os.path.join(config["out_dir"], "resources" ,"sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt"),
+@@ -204,73 +102,30 @@
+         oarfish_compilation = os.path.join(config["out_dir"], "resources", "oarfish_compiled_quant.tsv"),
+ 
+ 
++### PRE-ALIGNMENT
++include: "workflow/rules/cat_reads.smk"
++include: "workflow/rules/nanostat_raw_reads.smk"
++include: "workflow/rules/pychopper_trim.smk"
++
++### GENOME ALIGNMENT
++include: "workflow/rules/make_minimap2_junc_bed_file.smk"
++include: "workflow/rules/make_minimap2_mmi_file.smk"
++include: "workflow/rules/align_to_genome.smk"
++include: "workflow/rules/flagstat_genome_alignment.smk"
+ 
+-
+-
+-
+-# rule all:
+-    # input:
+-        ### PRE-ALIGNMENT (REQUIRED)
+-        # expand(os.path.join(OUT_DIR, "{run}", "a0-concat-fastq", "{barcode}_concatenated.fastq.gz"),
+-        #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-        # expand(os.path.join(OUT_DIR, "{run}", "a1-nanostat-raw-reads", "{barcode}_raw_read_nanostat.txt"),
+-        #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-        # expand(os.path.join(OUT_DIR, "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
+-        #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-       
+-       ### TRANSCRIPTOME ALIGNMENT
+-       #  expand(os.path.join(OUT_DIR, "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam"),
+-       #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-       #  expand(os.path.join(OUT_DIR, "{run}", "c1i-flagstat-transcriptome-alignments", "{barcode}_flagstat_transcriptome_alignment.txt"),
+-       #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-       #  expand(os.path.join(OUT_DIR, "{run}", "d0i-oarfish-transcriptome-aligned", "{barcode}_oarfish_quant_transcriptome_aligned.quant"),
+-       #         zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-        
+-        ### GENOME ALIGNMENT
+-        # os.path.join(OUT_DIR, "resources", "genomic.bed"),
+-        # os.path.join(OUT_DIR, "resources", "genomic.bed"),
+-        # os.path.join(OUT_DIR, "resources", "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.mmi"),
+-        # expand(os.path.join(OUT_DIR, "{run}", "c0ii-genome-alignments", "{barcode}_minimap2_genome_aligned_sorted.bam"),
+-        #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-        # expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
+-        #        zip, run=RUNS_LIST, barcode=BARCODES_LIST),
+-        
+-        ### SAMPLE QC
+-        # os.path.join(OUT_DIR, "resources", "nanostat_pychopper_flagstatGenomic_read_qc.tsv"),
+-        # os.path.join(config["out_dir"], "resources", "qc_filtered_samples.tsv"), 
+-        # os.path.join(config["out_dir"], "resources", "qc_filtered_samples.yaml")
+-
+-        ### ISOQUANT
+-        
+-
+-
+-
+-# include: "workflow/rules/cat_reads.smk"
+-# include: "workflow/rules/nanostat_raw_reads.smk"
+-# include: "workflow/rules/pychopper_trim.smk"
+-
+-
+-
+-# include: "workflow/rules/flagstat_transcriptome_alignment.smk"
+-
+-# include: "workflow/rules/make_minimap2_junc_bed_file.smk"
+-# include: "workflow/rules/make_minimap2_mmi_file.smk"
+-# include: "workflow/rules/align_to_genome.smk"
+-# include: "workflow/rules/flagstat_genome_alignment.smk"
+-
+-# include: "workflow/rules/compile_qc.smk"
++### SAMPLE QC
++include: "workflow/rules/compile_qc.smk"
+ include: "workflow/rules/qc_filter_samples.smk"
+ 
++### ISOFORM DISCOVERY + SQANTI3
+ include: "workflow/rules/isoquant_joint_discovery.smk"
+-
+ include: "workflow/rules/sqanti_qc_ncbi.smk"
+ include: "workflow/rules/sqanti_filter.smk"
+ include: "workflow/rules/sqanti_qc_filtered_ncbi_on_gega.smk"
+-
+ include: "workflow/rules/gffread_build_extended_transcriptome.smk"
+ 
++### TRANSCRIPTOME ALIGNMENT + QUANT
+ include: "workflow/rules/align_to_transcriptome.smk"
+-include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
+ include: "workflow/rules/flagstat_transcriptome_alignment.smk"
+-
+-include: "workflow/rules/compile_oarfish_quant.smk"
+\ No newline at end of file
++include: "workflow/rules/oarfish_quant_transcriptome_aligned.smk"
++include: "workflow/rules/compile_oarfish_quant.smk"
+diff --git a/workflow/rules/align_to_transcriptome.smk b/workflow/rules/align_to_transcriptome.smk
+--- a/workflow/rules/align_to_transcriptome.smk	2026-10-28 21:36:18.983068656 +0000
++++ b/workflow/rules/align_to_transcriptome.smk	2026-10-28 21:36:18.993470458 +0000
+@@ -1,12 +1,11 @@
+ rule align_to_transcriptome:
+     input:
+-        os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz")
++        reads = os.path.join(config["out_dir"], "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
++        gffread_extended_transcriptome = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti_extended_transcriptome.fa")
+     output:
+         os.path.join(config["out_dir"], "{run}", "c0i-transcriptome-alignments", "{barcode}_minimap2_transcriptome_aligned.bam")
+     log:
+         os.path.join(config["out_dir"], "logs", "{run}", "c0i-aligned-to-transcriptome", "{barcode}.log")
+-    params:
+-        gffread_extended_transcriptome = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti_extended_transcriptome.fa"),
+     conda:
+         "../envs/minimap2.yaml"
+     shell:
+@@ -27,8 +26,8 @@
+                 -N 100 \
+                 --eqx \
+                 -t {resources[minimap2_threads]} \
+-                {params[gffread_extended_transcriptome]} \
+-                {input} | \
++                {input[gffread_extended_transcriptome]} \
++                {input[reads]} | \
+             samtools \
+                 view \
+                 -@ {resources[samtools_threads]} \
+diff --git a/workflow/rules/compile_qc.smk b/workflow/rules/compile_qc.smk
+--- a/workflow/rules/compile_qc.smk	2026-10-28 21:36:18.983119276 +0000
++++ b/workflow/rules/compile_qc.smk	2026-10-28 21:36:18.993521066 +0000
+@@ -1,6 +1,10 @@
+ rule compile_qc:
+     input:
+-        expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
++        nanostat = expand(os.path.join(OUT_DIR, "{run}", "a1-nanostat-raw-reads", "{barcode}_raw_read_nanostat.txt"),
++               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
++        pychopper = expand(os.path.join(OUT_DIR, "{run}", "b0-pychopper-trimmed", "{barcode}_pychopper_trimmed.fastq.gz"),
++               zip, run=RUNS_LIST, barcode=BARCODES_LIST),
++        flagstat = expand(os.path.join(OUT_DIR, "{run}", "c1ii-flagstat-genome-alignments", "{barcode}_flagstat_genome_alignment.txt"),
+                zip, run=RUNS_LIST, barcode=BARCODES_LIST)
+     output:
+         os.path.join(config["out_dir"], "resources", "nanostat_pychopper_flagstatGenomic_read_qc.tsv")
+diff --git a/workflow/rules/qc_filter_samples.smk b/workflow/rules/qc_filter_samples.smk
+--- a/workflow/rules/qc_filter_samples.smk	2026-10-28 21:36:18.983290605 +0000
++++ b/workflow/rules/qc_filter_samples.smk	2026-10-28 21:36:18.993699382 +0000
+@@ -1,4 +1,4 @@
+-rule compile_qc:
++rule qc_filter_samples:
+     input:
+         os.path.join(config["out_dir"], "resources", "nanostat_pychopper_flagstatGenomic_read_qc.tsv")
+     output:
+diff --git a/workflow/rules/sqanti_filter.smk b/workflow/rules/sqanti_filter.smk
+--- a/workflow/rules/sqanti_filter.smk	2026-10-28 21:36:18.983305962 +0000
++++ b/workflow/rules/sqanti_filter.smk	2026-10-28 21:36:18.993713544 +0000
+@@ -1,6 +1,7 @@
+ rule sqanti_filter:
+     input:
+-        os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt")
++        classification = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_classification.txt"),
++        isoquant_dir = rules.isoquant_joint_discovery.output[0]
+     output:
+         sqanti_extended_classification = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_qc_on_ncbi_classification_N_samples.txt"),
+         filtered_gtf = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_results", "sqanti_qc_filtered.filtered.gtf")
+@@ -11,7 +12,6 @@
+         isoquant_extended_gtf = os.path.join(config["out_dir"], "resources", "isoquant_out", "USDA_RNA_seq", "USDA_RNA_seq.extended_annotation.gtf"),
+         tx_N_counts = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "isoquant_tx_N_counts.txt"),
+         source_labels = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "gtf_source_labels.txt"),
+-        sqanti_corrected_gtf = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi_corrected.gtf"),
+         out_dir = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_filter", "sqanti_results"),
+         json_filter = "workflow/aux/classification_rule.json"
+     conda:
+@@ -27,7 +27,7 @@
+             workflow/scripts/aggregate_isoquant_N_samples.sh \
+                 --transcript-counts {params[isoquant_tx_counts]} \
+                 --isoquant-gtf {params[isoquant_extended_gtf]} \
+-                --classification {input} \
++                --classification {input[classification]} \
+                 --output-ncounts {params[tx_N_counts]} \
+                 --output-source-labels {params[source_labels]} \
+                 --output-classification {output[sqanti_extended_classification]}
+@@ -38,7 +38,7 @@
+             python workflow/tools/sqanti3/sqanti3_filter.py \
+                 rules \
+                 --sqanti_class {output[sqanti_extended_classification]} \
+-                --filter_gtf {params[sqanti_corrected_gtf]} \
++                --filter_gtf {input[sqanti_corrected_gtf]} \
+                 -d {params[out_dir]} \
+                 -o sqanti_qc_filtered \
+                 -c {resources[cpus_per_task]} \
+diff --git a/workflow/rules/sqanti_qc_ncbi.smk b/workflow/rules/sqanti_qc_ncbi.smk
+--- a/workflow/rules/sqanti_qc_ncbi.smk	2026-10-28 21:36:18.983336696 +0000
++++ b/workflow/rules/sqanti_qc_ncbi.smk	2026-10-28 21:36:18.993794616 +0000
+@@ -1,6 +1,6 @@
+ rule sqanti_qc_ncbi:
+     input:
+-        isoquant_gtf = os.path.join(config["out_dir"], "resources", "isoquant_out", "USDA_RNA_seq", "USDA_RNA_seq.extended_annotation.gtf"),
++        isoquant_dir = rules.isoquant_joint_discovery.output[0],
+         ncbi_gtf = os.path.join(config["ref_dir"], "genomic.gtf"),
+         ncbi_fasta = os.path.join(config["ref_dir"], "GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.fna")
+     output:
+@@ -15,6 +15,7 @@
+     log:
+         os.path.join(config["out_dir"], "logs", "resources", "sqanti_qc_ncbi.log")
+     params:
++        isoquant_gtf = os.path.join(config["out_dir"], "resources", "isoquant_out", "USDA_RNA_seq", "USDA_RNA_seq.extended_annotation.gtf"),
+         sqanti_out_dir = os.path.join(config["out_dir"], "resources", "sqanti3_out", "sqanti3_qc_on_ncbi", "sqanti_qc_on_ncbi")
+     conda:
+         "../envs/SQANTI3.conda_env.yml"
+@@ -25,7 +26,7 @@
+             echo "======== SQANTI3 version:"
+ 
+             python workflow/tools/sqanti3/sqanti3_qc.py \
+-                --isoforms {input[isoquant_gtf]} \
++                --isoforms {params[isoquant_gtf]} \
+                 --refGTF {input[ncbi_gtf]} \
+                 --refFasta {input[ncbi_fasta]} \
+                 -t {resources[cpus_per_task]} \

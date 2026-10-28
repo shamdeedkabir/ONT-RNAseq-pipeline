@@ -1,4 +1,4 @@
-rule compile_qc:
+rule qc_filter_samples:
     input:
         os.path.join(config["out_dir"], "resources", "nanostat_pychopper_flagstatGenomic_read_qc.tsv")
     output:
